@@ -10,9 +10,12 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
+import org.eclipse.microprofile.opentracing.Traced;
+
 import br.com.stefanini.maratonadev.model.Todo;
 
 @RequestScoped
+@Traced
 public class TodoDao {
 	
 	@PersistenceContext
@@ -35,14 +38,20 @@ public class TodoDao {
 		List<Todo> listaRetorno;
 		String nomeConsulta = "CONSULTAR_TODO";
 		TypedQuery<Todo> query = em.createNamedQuery(nomeConsulta, Todo.class);
-		
 		try {
 			listaRetorno = query.getResultList();
 		} catch (Exception e) {
 			listaRetorno = new ArrayList<>();
 		}
-		
 		return listaRetorno;
+	}
+	
+	@Transactional
+	public void excuir(Long id) {
+		String nomeSql = "EXCLUIR_TODO";
+		Query query = em.createNamedQuery(nomeSql);
+		query.setParameter("id", id);		
+		query.executeUpdate();
 	}
 	
 }

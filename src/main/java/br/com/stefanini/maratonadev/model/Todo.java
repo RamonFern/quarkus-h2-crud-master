@@ -21,7 +21,8 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 		+ "SELECT id, nome, dataCriacao FROM todo", resultClass = Todo.class),
 	@NamedNativeQuery(name = "INSERIR_TODO", query = ""
 		+ "INSERT INTO todo (nome, dataCriacao) values "
-		+ "(:nome, :dataCriacao)", resultClass = Todo.class)
+		+ "(:nome, :dataCriacao)"),
+	@NamedNativeQuery(name = "EXCLUIR_TODO", query = "DELETE todo WHERE id = :id")
 })
 public class Todo extends PanacheEntityBase {
 
