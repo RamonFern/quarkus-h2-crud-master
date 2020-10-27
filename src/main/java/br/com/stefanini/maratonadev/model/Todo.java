@@ -12,28 +12,39 @@ import javax.persistence.NamedNativeQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.PastOrPresent;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 @Entity
 @Table(name = "todo")
-@NamedNativeQueries({
-	@NamedNativeQuery(name="CONSULTAR_TODO", query=""
-			+ "SELECT id, nome, dataCriacao FROM todo", resultClass = Todo.class)
+@NamedNativeQueries({ 
+	@NamedNativeQuery(name = "CONSULTAR_TODO", query = ""
+		+ "SELECT id, nome, dataCriacao FROM todo", resultClass = Todo.class),
+	@NamedNativeQuery(name = "INSERIR_TODO", query = ""
+		+ "INSERT INTO todo (nome, dataCriacao) values "
+		+ "(:nome, :dataCriacao)", resultClass = Todo.class)
 })
 public class Todo extends PanacheEntityBase {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	//@CreationTimestamp
+
+	// @CreationTimestamp
 	@PastOrPresent
 	private LocalDateTime dataCriacao;
-	
-	@Column(name="nome", length = 250, nullable = false)
+
+	@Column(name = "nome", length = 250, nullable = false)
 	private String nome;
+
+	public Todo() {
+
+	}
+
+	public Todo(Long id, LocalDateTime dataCriacao, String nome) {
+		this.id = id;
+		this.dataCriacao = dataCriacao;
+		this.nome = nome;
+	}
 
 	public Long getId() {
 		return id;
@@ -58,16 +69,5 @@ public class Todo extends PanacheEntityBase {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
-	public Todo() {
-		
-	}
 
-	public Todo(Long id, LocalDateTime dataCriacao, String nome) {
-		this.id = id;
-		this.dataCriacao = dataCriacao;
-		this.nome = nome;
-	}
-	
-	
 }

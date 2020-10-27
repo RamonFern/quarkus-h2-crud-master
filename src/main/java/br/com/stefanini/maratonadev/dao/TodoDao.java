@@ -4,20 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 
 import br.com.stefanini.maratonadev.model.Todo;
 
 @RequestScoped
 public class TodoDao {
 	
-	@Inject
+	@PersistenceContext
 	EntityManager em;
 
+	@Transactional
 	public void inserir(Todo todo) {
-		Todo.persist(todo);
+		String nomeSql = "INSERIR_TODO";
+		Query query = em.createNamedQuery(nomeSql);
+		
+		//query.setParameter("id", todo.getId());
+		query.setParameter("nome", todo.getNome());
+		query.setParameter("dataCriacao", todo.getDataCriacao());
+		
+		query.executeUpdate();
 	}
 	
 	public List<Todo> listar() {
@@ -29,7 +39,7 @@ public class TodoDao {
 		try {
 			listaRetorno = query.getResultList();
 		} catch (Exception e) {
-			listaRetorno = new ArrayList<Todo>();
+			listaRetorno = new ArrayList<>();
 		}
 		
 		return listaRetorno;
