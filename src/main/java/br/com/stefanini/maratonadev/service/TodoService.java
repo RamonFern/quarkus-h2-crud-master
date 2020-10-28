@@ -7,6 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.NotFoundException;
 
 import org.eclipse.microprofile.opentracing.Traced;
@@ -26,13 +27,14 @@ public class TodoService {
 	
 	private void validar(Todo todo) {
 		//validar regra de negocio
-		if(todo.getNome() == null) {
+		
+		if(dao.isNomeRepetido(todo.getNome())) {
 			throw new NotFoundException();
 		}
 	}
 	
 	@Transactional(rollbackOn = Exception.class)
-	public void inserir(TodoDto todoDto) {
+	public void inserir(@Valid TodoDto todoDto) {
 		//validacao
 		Todo todo = TodoParser.get().entidade(todoDto);
 		validar(todo);
@@ -49,6 +51,9 @@ public class TodoService {
 	
 	public void excluir(Long id) {
 		//DESAFIO: Validar se id é válido
+		if(dao.buscarPorId(id) == null) {
+			throw new NotFoundException();
+		}
 		dao.excuir(id);
 	}
 

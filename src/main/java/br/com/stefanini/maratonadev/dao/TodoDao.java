@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -52,6 +53,28 @@ public class TodoDao {
 		Query query = em.createNamedQuery(nomeSql);
 		query.setParameter("id", id);		
 		query.executeUpdate();
+	}
+	
+	public Boolean isNomeRepetido(String nome) {
+		String nomeSql = "CONSULTAR_NOME_REPETIDO_TODO";
+		Boolean nomeRepetido = Boolean.FALSE;
+		TypedQuery<Todo> query = em.createNamedQuery(nomeSql, Todo.class);
+		query.setParameter("nome", nome);
+		nomeRepetido = query.getResultList().size() > 0;
+		return nomeRepetido;
+	}
+	
+	public Todo buscarPorId(Long id) {
+		String nomeSql = "CONSULTAR_TODO_ID";
+		Todo todo;
+		TypedQuery<Todo> query = em.createNamedQuery(nomeSql, Todo.class);
+		query.setParameter("id", id);
+		try {
+			todo = query.getSingleResult();
+		} catch (NoResultException e) {
+			todo = null;
+		}
+		return todo;
 	}
 	
 }
