@@ -23,6 +23,7 @@ public class TodoParser {
 		dto.setId(entidade.getId());
 		dto.setNome(entidade.getNome());
 		dto.setDataCriacao(entidade.getDataCriacao());
+		dto.setStatus(entidade.getStatus().get(0).toString());
 		
 		return dto;
 	}

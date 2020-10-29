@@ -19,6 +19,8 @@ public class TodoDto implements Serializable{
 	@JsonbDateFormat("dd/MM/yyyy HH:mm")
 	private LocalDateTime dataCriacao;
 	
+	private String status;
+	
 	
 	public Long getId() {
 		return id;
@@ -37,6 +39,12 @@ public class TodoDto implements Serializable{
 	}
 	public void setDataCriacao(LocalDateTime dataCriacao) {
 		this.dataCriacao = dataCriacao;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

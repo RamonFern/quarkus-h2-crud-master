@@ -22,12 +22,30 @@ public class TodoDao {
 	@PersistenceContext
 	EntityManager em;
 
+	/*
+	 * Insere um TODO e retorna o id criado
+	 * @param todo
+	 * @return 
+	 */
 	@Transactional
-	public void inserir(Todo todo) {
+	public Long inserir(Todo todo) {
 		String nomeSql = "INSERIR_TODO";
+		//inserirOuAtualizar(nomeSql, todo);
+		todo.persistAndFlush();
+		return todo.getId();
+	}
+	
+	@Transactional
+	public void atualizar(Todo todo) {
+		String nomeSql = "ATUALIZAR_TODO";
+		inserirOuAtualizar(nomeSql, todo);
+	}
+	
+	@Transactional
+	private void inserirOuAtualizar(String nomeSql, Todo todo) {
 		Query query = em.createNamedQuery(nomeSql);
 		
-		//query.setParameter("id", todo.getId());
+		query.setParameter("id", todo.getId());
 		query.setParameter("nome", todo.getNome());
 		query.setParameter("dataCriacao", todo.getDataCriacao());
 		
@@ -59,7 +77,7 @@ public class TodoDao {
 		String nomeSql = "CONSULTAR_NOME_REPETIDO_TODO";
 		Boolean nomeRepetido = Boolean.FALSE;
 		TypedQuery<Todo> query = em.createNamedQuery(nomeSql, Todo.class);
-		query.setParameter("nome", nome);
+		query.setParameter("nome", "%"+nome+"%");
 		nomeRepetido = query.getResultList().size() > 0;
 		return nomeRepetido;
 	}

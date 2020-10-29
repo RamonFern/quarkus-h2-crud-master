@@ -12,6 +12,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -75,7 +76,7 @@ public class TodoRest {
 //			listaErros.forEach(i -> {
 //				System.out.println(i);
 //			});
-			throw new NotFoundException();
+			throw new NotFoundException(listaErros.get(0));
 		}
 		
 		return Response
@@ -98,6 +99,35 @@ public class TodoRest {
 		return Response
 				.status(Response.Status.ACCEPTED)
 				.build();
+	}
+	
+	@GET
+	@Path("/{id}")
+	@Operation(summary = "buscar uma tarefa por id",
+	description = "buscar uma tarefa por id")
+	@APIResponse(responseCode = "200", 
+	description = "burcar tarefas por id",
+	content = {
+			@Content(mediaType = "application/json", 
+			schema = @Schema(implementation = TodoDto.class))
+	})
+	public Response buscarPorId(@PathParam("id") Long id) {
+		return Response.status(Response.Status.OK).entity(service.buscar(id)).build();
+	}
+	
+	@PUT
+	@Path("/{id}")
+	@Operation(summary = "editar uma tarefa com base no id",
+	description = "editar uma tarefa por base no id")
+	@APIResponse(responseCode = "200", 
+	description = "editar tarefas buscando primeiro pelo id",
+	content = {
+			@Content(mediaType = "application/json", 
+			schema = @Schema(implementation = TodoDto.class))
+	})
+	public Response atualizar(@PathParam("id") Long id, TodoDto todoDto) {
+		service.atualizar(id, todoDto);
+		return Response.status(Response.Status.OK).build();
 	}
 	
 
