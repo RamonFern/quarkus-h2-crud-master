@@ -38,7 +38,8 @@ public class TodoDao {
 	@Transactional
 	public void atualizar(Todo todo) {
 		String nomeSql = "ATUALIZAR_TODO";
-		inserirOuAtualizar(nomeSql, todo);
+		//inserirOuAtualizar(nomeSql, todo);
+		todo.persistAndFlush();
 	}
 	
 	@Transactional
@@ -69,8 +70,9 @@ public class TodoDao {
 	public void excuir(Long id) {
 		String nomeSql = "EXCLUIR_TODO";
 		Query query = em.createNamedQuery(nomeSql);
-		query.setParameter("id", id);		
-		query.executeUpdate();
+//		query.setParameter("id", id);		
+//		query.executeUpdate();
+		Todo.deleteById(id);
 	}
 	
 	public Boolean isNomeRepetido(String nome) {

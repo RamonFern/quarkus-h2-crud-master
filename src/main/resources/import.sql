@@ -1,0 +1,2 @@
+insert into User(id,nome,email,permissao,senha) values ('445af9b662914601aa4e403c68e6f3f7', 'Ramon', 'ramonfernandes9@gmail.com','ADMIN', 'sophiaraul');
+insert into User(id,nome,email,permissao,senha) values ('8a9955ab62e4404885ccf60d638e154d', 'Raul', 'raulfernandes9@gmail.com','USER', 'raul');

@@ -41,14 +41,14 @@ public class TodoService {
 	 * */
 	
 	@Transactional(rollbackOn = Exception.class)
-	public void inserir(@Valid TodoDto todoDto) {
+	public void inserir(@Valid TodoDto todoDto, String emailLogado) {
 		//validacao
 		Todo todo = TodoParser.get().entidade(todoDto);
 		validar(todo);
 	
 		//chamada do dao
 		Long id = dao.inserir(todo);
-		statusService.inserir(id, StatusEnum.TODO);
+		statusService.inserir(id, StatusEnum.TODO, emailLogado);
 	}
 	
 	
@@ -72,14 +72,14 @@ public class TodoService {
 	}
 
 	@Transactional(rollbackOn = Exception.class)
-	public void atualizar(Long id, TodoDto dto) {
+	public void atualizar(Long id, TodoDto dto, String emailLogado) {
 		Todo todo = TodoParser
 						.get()
 						.entidade(dto);
 		Todo todoBanco = buscarPorId(id);
 		todoBanco.setNome(todo.getNome());
 		dao.atualizar(todoBanco);
-		statusService.atualizar(id, dto.getStatus());
+		statusService.atualizar(id, dto.getStatus(), emailLogado);
 	}
 	
 	private Todo buscarPorId(Long id) {

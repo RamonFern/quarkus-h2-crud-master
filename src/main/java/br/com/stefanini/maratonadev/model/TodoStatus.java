@@ -30,18 +30,25 @@ public class TodoStatus extends PanacheEntity{
 	@Column(name = "data")
 	@UpdateTimestamp
 	private LocalDateTime data;
+	
+	@ManyToOne(optional = false)
+	private User user;
+
+	
+	
 
 	public TodoStatus(StatusEnum enumText) {
 		this.status = enumText;
 	}
+	
+	public TodoStatus() {}
+	
 	public Todo getTodo() {
 		return todo;
 	}
 	public void setTodo(Todo todo) {
 		this.todo = todo;
 	}
-	public TodoStatus() {}
-
 
 	public Long getId() {
 		return id;
@@ -65,6 +72,14 @@ public class TodoStatus extends PanacheEntity{
 
 	public void setData(LocalDateTime data) {
 		this.data = data;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	@Override

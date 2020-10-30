@@ -49,7 +49,7 @@ public class Todo extends PanacheEntityBase {
 	@CreationTimestamp
 	private LocalDateTime dataCriacao;
 
-	@OneToMany(mappedBy = "todo", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "todo", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<TodoStatus> status;
 	
 

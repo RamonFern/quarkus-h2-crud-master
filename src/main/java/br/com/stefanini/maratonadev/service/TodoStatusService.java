@@ -21,6 +21,9 @@ public class TodoStatusService {
 
 	@Inject
 	TodoStatusDao dao;
+	
+	@Inject
+	UserService userService;
 
 	private void validar(TodoStatus todoStatus) {
 
@@ -37,19 +40,25 @@ public class TodoStatusService {
 	}
 
 	@Transactional(rollbackOn = Exception.class)
-	public void inserir(Long id, StatusEnum enumText) {
+	public void inserir(Long id, StatusEnum enumText, String emailLogado) {
 		TodoStatus status = new TodoStatus(enumText);
 		status.setTodo(new Todo(id));
+		status.setUser(userService.buscarUsuarioPorEmail(emailLogado));
 		validar(status);
 		dao.inserir(status);
 
 	}
 
-	public void atualizar(Long id, String enumText) {
+	public void atualizar(Long id, String enumText, String emailLogado) {
 		TodoStatus statusTela = new TodoStatus(StatusEnum.valueOf(enumText));
 		statusTela.setTodo(new Todo(id));
+		
 		TodoStatus statusBanco = dao.buscarStatusPorTarefa(id).get(0);
 		validarAtualizacao(statusBanco, statusTela);
+		
+		statusTela.setTodo(new Todo(id));
+		statusTela.setUser(userService.buscarUsuarioPorEmail(emailLogado));
+		
 		dao.inserir(statusTela);
 	}
 	
